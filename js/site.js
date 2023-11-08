@@ -1,55 +1,104 @@
-import * as THREE from 'three'; //only works thru vite... npx vite
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-var scene = new THREE.Scene();
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, calculateAspectRatio(), 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true });
 
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5; 
+setSize();
 
-var renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor(0x000000, 0); 
+renderer.domElement.style.position = 'absolute';
+renderer.domElement.style.top = '50%';
+renderer.domElement.style.left = '50%';
+renderer.domElement.style.transform = 'translate(-50%, -50%)';
 document.body.appendChild(renderer.domElement);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-
-var ambientLight = new THREE.AmbientLight(0xffffff, 0.5); 
-scene.add(ambientLight);
 
 const loader = new GLTFLoader();
 loader.load(
     'assets/scene.gltf', 
     function (gltf) {
-        console.log('Model loaded:', gltf); 
         scene.add(gltf.scene);
+        gltf.scene.rotation.x += 0.005; 
         animate();
     },
     undefined,
     function (error) {
-        console.error('An error happened while loading the model:', error);
+        console.error(error);
     }
 );
 
-var geometry = new THREE.BoxGeometry(1, 1, 1);
-var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-var cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+camera.position.z = 60;
 
-function animate() {
-    requestAnimationFrame(animate);
-    controls.update(); // Only required if controls.enableDamping or controls.autoRotate are set to true
-    renderer.render(scene, camera);
-    cube.rotation.x += 0.01; 
-    cube.rotation.y += 0.01;
-}
+// not showing up yet...
+const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xFF0000 });
+const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+sphere.position.set(2, 0, 0);
+sphere.userData = { isClickable: true };
+scene.add(sphere);
 
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
+window.addEventListener('click', onClick, false);
 
 window.addEventListener('resize', onWindowResize, false);
 
-animate(); 
+const light = new THREE.HemisphereLight(0xffffff, 0x444444);
+light.position.set(1, 1, 1);
+scene.add(light);
+
+function animate() {
+    requestAnimationFrame(animate);
+    const gltfModel = scene.children.find(child => child.isGroup);
+
+    if (gltfModel) {
+        gltfModel.rotation.y += 0.005;
+    }
+
+    renderer.render(scene, camera);
+}
+
+// Click event handling
+function onClick(event) {
+    const mouse = new THREE.Vector2(
+        (event.clientX / window.innerWidth) * 2 - 1,
+        -(event.clientY / window.innerHeight) * 2 + 1
+    );
+
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(scene.children);
+    for (let intersect of intersects) {
+        if (intersect.object.userData.isClickable) {
+            console.log('Red sphere was clicked!');
+            break;
+        }
+    }
+}
+
+function onWindowResize() {
+    camera.aspect = calculateAspectRatio();
+    camera.updateProjectionMatrix();
+    setSize();
+}
+
+function setSize() {
+    const maxWidth = window.innerWidth * 0.8; 
+    const maxHeight = window.innerHeight * 0.8; 
+    const aspectRatio = calculateAspectRatio();
+    let newWidth, newHeight;
+
+    if (maxWidth < maxHeight * aspectRatio) {
+        newWidth = maxWidth;
+        newHeight = maxWidth / aspectRatio;
+    } else {
+        newWidth = maxHeight * aspectRatio;
+        newHeight = maxHeight;
+    }
+
+    renderer.setSize(newWidth, newHeight);
+}
+
+function calculateAspectRatio() {
+    const aspectRatio = 16 / 9; 
+    return aspectRatio;
+}
