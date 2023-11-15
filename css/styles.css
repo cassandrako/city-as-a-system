@@ -1,22 +1,230 @@
 body {
-    margin: 0;
-    background-color: black;
-    overflow: hidden;
+    background: linear-gradient(to bottom, #000000, #1a1a1a);
+    background-attachment: fixed;  
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0; 
+    font-family: 'Segoe UI';
 }
 
-.text-box {
-    position: absolute;
-    width: 100px;
-    height: 50px;
-    background-color: white;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    display: none;
+nav {
+    display: flex;
+    justify-content: space-around;  
+    align-items: center;
+    padding: 20px;
+    position: fixed;
+    top: 0;  
+    width: 100%;
+    font-size: 1.5em;
+    background-color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); 
 }
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+nav a:hover {
+    color: gray;
+}
+
+h1.header {
+    text-align: center;
+    margin-top: 120px; 
+    font-size: 2em;
+}
+
+section {
+    padding: 50px 20px;  
+    margin-top: 1000px;  
+}
+
+section h2 {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px; 
+    display: inline-block;  
+    padding-bottom: 5px;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+select {
+    padding: 1em;
+    font-size: 1.2em;
+    margin: 2em auto; 
+    display: block;
+    width: calc(100% - 4em); /* Subtracting padding from the total width */
+    max-width: 500px;
+    border: 2px solid #555; 
+    border-radius: 12px;
+    appearance: none;
+    background-color: #333; 
+    color: #DDD; 
+    cursor: pointer;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+    box-sizing: border-box; /* To include padding and border in the width */
+}
+
+select:hover {
+    border-color: #777;
+    transform: scale(1.02); /* Slightly enlarges the select box when hovered */
+}
+
+select:focus {
+    outline: none;
+    border-color: #999;
+}
+
+.chart-container {
+    width: 80%;
+    height: 500px;
+    margin: 0 auto;
+}
+
+
+#map {
+    height: 400px; /* or 100vh for full height */
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+  
+th {
+    background-color: #9d9d9d;
+}
+  
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* css for 3d models */
+#canvas-container {
+    width: 100%;
+    height: 90vh;
+    margin-top: 10%; 
+}
+
+
 
 canvas {
     width: 100%;
-    height: 80vh; 
-    position: absolute;
-    top: 20%; 
+    height: 100%;
+    margin-bottom: -75%;
 }
+
+#header {
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+#header h1 {
+    font-size: 2em;
+    color: white;
+    font-family: 'Segoe UI';
+    margin: 0;
+    padding: 0;
+    margin-top: 12%;
+    animation: fadeIn 2s ease-out 4s forwards;
+}
+
+#textbox {
+    color: white;
+    font-family: 'Segoe UI';
+    font-size: 1em;
+    margin-top: 1em; 
+    padding: 0 1em; 
+    width: 80%;
+    animation: fadeIn 2s ease-out 4s forwards;
+    margin-left: 8%;
+}
+
+.three-column-section {
+    display: flex;
+    justify-content: space-around;
+    padding: 0px, 30px;
+    width: 90%;
+    margin-left: 4.5%;
+}
+
+.column {
+    flex: 1;
+    margin: 0 20px; 
+    text-align: center; 
+    margin-bottom: 20%;
+}
+
+.column h2 {
+    font-size: 1.5em;
+    color: #ffffff; 
+    font-family: 'Segoe UI';
+}
+
+.column p {
+    font-size: 1em;
+    color: #d4d4d4; 
+    font-family: 'Segoe UI';
+}
+
+#model-container-1 {
+    width: 100%;
+    height: 80vh;
+    position: relative;
+}
+
+#model-container-2 {
+    position: absolute;
+    top: 95em; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    /* height: auto; */
+}
+
+#canvas-container-2 {
+    top: 60%; 
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none; /* Removes the border */
+}
+
+#api-frame {
+    width: 1000px;
+    height: 800px;
+    margin:auto;
+
+}
+
+/* diff types of keyframes to use */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
