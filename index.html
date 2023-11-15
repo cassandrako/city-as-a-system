@@ -4,8 +4,271 @@
     <meta charset="UTF-8">
     <title>City as a System</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.7.1/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v1.7.1/leaflet.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
 </head>
 <body>
+    <nav>
+        <a href="#salary-section">Salary</a>
+        <a href="#housing-section">Housing</a>
+        <a href="#expenses-section">Expenses</a>
+    </nav>
+    <div id="header">
+        <h1 id="animated-heading">New York City is the 6th most expensive city in the world</h1>
+        <div id="textbox">Making it the most expensive city in North America compared to its counterparts such as Los Angeles (ranked 11th) and San Francisco (14th). New York City, the beacon of dreams and ambition, is a global hub of culture, diversity, and unparalleled influence in commerce, finance, and the arts.</div>
+    </div>
+    <div id="canvas-container">
+        <canvas id="canvas1"></canvas>
+    </div>
+
+    <section class="three-column-section">
+        <div class="column">
+            <h2>Housing</h2>
+            <p>At the pinnacle of extravagance, the penthouse of Central Park Tower stands out, valued at an astonishing $250 million. This illustrious residence, situated in one of the city’s most coveted locations, holds the title of the highest residential home on the planet, complete with the world’s highest residential terrace.</p>
+        </div>
+        <div class="column">
+            <h2>Salary</h2>
+            <p>The average wage in the United States is roughly $59,000, which is insignificant in comparison to New York City's average of $79,000, reflecting the city's high cost of living and economic importance. This figure is far higher than the global average pay, which is believed to be around $18,000, highlighting the massive economic differences across different locales.</p>
+        </div>
+        <div class="column">
+            <h2>Cost of Living</h2>
+            <p>This significant price increase is indicative of the broader rise in New York City's cost of living, which is now 30% higher than the average of other states. Specifically, housing costs are 78% higher than the national average.The living expenses for a single person estimated monthly cost is $1553 without rent and mortgage.</p>
+        </div>
+    </section>
+
+    <div>
+        <select id="salaryType" onchange="updateSalary()">
+          <option value="Yearly">Yearly</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Hourly">Hourly</option>
+        </select>
+      </div>
+      
+      <div class="chart-container" style="position: relative; height:40vh; width:80vw">
+          <canvas id="salaryHistogramChart"></canvas>
+      </div>
+
+    </section>
+    <section id="housing-section">
+        <h2>Housing</h2>
+        <!-- Housing section -->
+
+    <!-- Sketchfab Viewer -->
+    <div id="api-frame">
+    <iframe title="City as a System" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/2d9944241223457d9b88c866e38736c3/embed"></iframe>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.7.0.js"></script>
+
+    <script src="js/site.js"></script>
     <script type="module" src="js/site.js"></script>
+</body>
+
+<select id="apartmentType" onchange="updateChart()">
+    <option value="Studio">Studio</option>
+    <option value="1 Bedroom">1 Bedroom</option>
+    <option value="2 Bedroom">2 Bedroom</option>
+    <option value="3 Bedroom">3 Bedroom</option>
+    <option value="4 Bedroom">4 Bedroom</option>
+</select>
+
+
+<div class="chart-container">
+    <canvas id="myChart" width="400" height="200"></canvas>
+</div>
+
+
+<form id="neighborhoodForm">
+    <fieldset>
+      <legend>Select Neighborhoods to Compare:</legend>
+      <div>
+        <input type="checkbox" id="flatbush" name="neighborhood" value="Flatbush, New York, NY">
+        <label for="flatbush">Flatbush</label>
+      </div>
+      <div>
+        <input type="checkbox" id="washingtonHeights" name="neighborhood" value="Washington Heights, New York, NY">
+        <label for="washingtonHeights">Washington Heights</label>
+      </div>
+      <div>
+        <input type="checkbox" id="westharlem" name="neighborhood" value= "West Harlem, New York, NY">
+        <label for="westharlem">West Harlem</label>
+      </div>
+      <div>
+        <input type="checkbox" id="harlem" name="neighborhood" value= "Harlem, New York, NY">
+        <label for="harlem">Harlem</label>
+      </div>
+      <div>
+        <input type="checkbox" id="eastHarlem" name="neighborhood" value="East Harlem, New York, NY">
+        <label for="eastHarlem">East Harlem</label>
+    </div>
+        <div>
+            <input type="checkbox" id="astoria" name="neighborhood" value="Astoria, New York, NY">
+            <label for="astoria">Astoria</label> 
+        </div>
+        <div>
+            <input type="checkbox" id="williamsburg" name="neighborhood" value="Williamsburg, New York, NY">
+            <label for="williamsburg">Williamsburg</label>
+        </div>
+        <div>
+            <input type="checkbox" id="parkSlope" name="neighborhood" value="Park Slope, New York, NY">
+            <label for="parkSlope">Park Slope</label>
+        </div>
+        <div>
+            <input type="checkbox" id="greenpoint" name="neighborhood" value="Greenpoint, New York, NY">
+            <label for="greenpoint">Greenpoint</label>
+        </div>
+        <div>
+            <input type="checkbox" id="chelsea" name="neighborhood" value="Chelsea, New York, NY">
+            <label for="chelsea">Chelsea</label>
+        </div>
+        <div>
+            <input type="checkbox" id="tribeca" name="neighborhood" value="Tribeca, New York, NY">
+            <label for="tribeca">Tribeca</label>
+        </div>
+        <div>
+            <input type="checkbox" id="financialDistrict" name="neighborhood" value="Financial District, New York, NY">
+            <label for="financialDistrict">Financial District</label>
+        </div>
+        <div>
+            <input type="checkbox" id="upperEastSide" name="neighborhood" value="Upper East Side, New York, NY">
+            <label for="upperEastSide">Upper East Side</label>
+        </div>
+        <div>
+            <input type="checkbox" id="upperWestSide" name="neighborhood" value="Upper West Side, New York, NY">
+            <label for="upperWestSide">Upper West Side</label>
+        </div>
+        <div>
+            <input type="checkbox" id="eastHarlem" name="neighborhood" value="East Harlem, New York, NY">
+            <label for="eastHarlem">East Harlem</label>
+        </div>
+        <div>
+            <input type="checkbox" id="murrayHill" name="neighborhood" value="Murray Hill, New York, NY">
+            <label for="murrayHill">Murray Hill</label>
+        </div>
+        <div>
+            <input type="checkbox" id="kipsBay" name="neighborhood" value="Kips Bay, New York, NY">
+            <label for="kipsBay">Kips Bay</label>
+        </div>
+        <div>
+            <input type="checkbox" id="gramercy" name="neighborhood" value="Gramercy, New York, NY">
+            <label for="gramercy">Gramercy</label>
+        </div>
+        <div>
+            <input type="checkbox" id="chinatown" name="neighborhood" value="Chinatown, New York, NY">
+            <label for="chinatown">Chinatown</label>
+        </div>
+        <div>
+            <input type="checkbox" id="littleItaly" name="neighborhood" value="Little Italy, New York, NY">
+            <label for="littleItaly">Little Italy</label>
+        </div>
+        <div>
+            <input type="checkbox" id="lowerEastSide" name="neighborhood" value="Lower East Side, New York, NY">
+            <label for="lowerEastSide">Lower East Side</label>
+        </div>
+        <div>
+            <input type="checkbox" id="greenwichVillage" name="neighborhood" value="Greenwich Village, New York, NY">
+            <label for="greenwichVillage">Greenwich Village</label>
+        </div>
+        <div>
+            <input type="checkbox" id="westVillage" name="neighborhood" value="West Village, New York, NY">
+            <label for="westVillage">West Village</label>
+        </div>
+        <div>
+            <input type="checkbox" id="flatironDistrict" name="neighborhood" value="Flatiron District, New York, NY">
+            <label for="flatironDistrict">Flatiron District</label>
+        </div>
+        <div>
+            <input type="checkbox" id="unionSquare" name="neighborhood" value="Union Square, New York, NY">
+            <label for="unionSquare">Union Square</label>
+        </div>
+        <div>
+            <input type="checkbox" id="meatpackingDistrict" name="neighborhood" value="Meatpacking District, New York, NY">
+            <label for="meatpackingDistrict">Meatpacking District</label>
+        </div>
+        <div>
+            <input type="checkbox" id="chelsea" name="neighborhood" value="Chelsea, New York, NY">
+            <label for="chelsea">Chelsea</label>
+        </div>
+        <div>
+            <input type="checkbox" id="stuyvesantTown" name="neighborhood" value="Stuyvesant Town, New York, NY">
+            <label for="stuyvesantTown">Stuyvesant Town</label>
+        </div>
+        <div>
+            <input type="checkbox" id="eastVillage" name="neighborhood" value="East Village, New York, NY">
+            <label for="eastVillage">East Village</label>
+        </div>
+        <div>
+            <input type="checkbox" id="lowerEastSide" name="neighborhood" value="Lower East Side, New York, NY">
+            <label for="lowerEastSide">Lower East Side</label>
+        </div>
+        <div>
+            <input type="checkbox" id="chinatown" name="neighborhood" value="Chinatown, New York, NY">
+            <label for="chinatown">Chinatown</label>
+        </div>
+        <div>
+            <input type="checkbox" id="littleItaly" name="neighborhood" value="Little Italy, New York, NY">
+            <label for="littleItaly">Little Italy</label>
+        </div>
+        <div>
+            <input type="checkbox" id="tribeca" name="neighborhood" value="Tribeca, New York, NY">
+            <label for="tribeca">Tribeca</label>
+        </div>
+        <div>
+            <input type="checkbox" id="financialDistrict" name="neighborhood" value="Financial District, New York, NY">
+            <label for="financialDistrict">Financial District</label>
+        </div>
+        <div>
+        <div>
+            <input type="checkbox" id="morningsideHeights" name="neighborhood" value="Morningside Heights, New York, NY">
+            <label for="morningsideHeights">Morningside Heights</label>
+        </div>
+        <div>
+            <input type="checkbox" id="kipsBay" name="neighborhood" value="Kips Bay, New York, NY">
+            <label for="kipsBay">Kips Bay</label>
+        </div>
+        <div>
+            <input type="checkbox" id="gramercy" name="neighborhood" value="Gramercy Park, New York, NY">
+            <label for="gramercy">Gramercy</label>
+        </div>
+        <div>
+            <input type="checkbox" id="prospectHeights" name="neighborhood" value=  "Prospect Heights, New York, NY">
+            <label for="prospectHeights">Prospect Heights"</label>
+        </div>
+
+      <div>
+        <input type="submit" value="Compare">
+      </div>
+    </fieldset>
+  </form>
+  
+  <canvas id="comparisonChart" width="400" height="200"></canvas>
+
+
+
+</section>
+
+<section id="expenses-section">
+    <h2>Expenses</h2>
+    <!-- Expenses section -->
+
+    <select id="citySelector">
+        <option value="Dallas_TX_vs_NewYork_NY">Dallas, TX vs New York, NY</option>
+        <option value="LosAngeles_CA_vs_NewYork_NY">Los Angeles, CA vs New York, NY</option>
+        <option value="Miami_FL_vs_NewYork_NY">Miami, FL vs New York, NY</option>
+        <option value="SanFran_CA_vs_NewYork_NY">San Francisco, CA vs New York, NY</option>
+    </select>
+
+    <div id="costTableContainer"></div>
+
+
+    <canvas id="costOfLivingChart" width="400" height="200"></canvas>
+    
+</section>
+
 </body>
 </html>
